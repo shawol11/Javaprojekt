@@ -1,3 +1,3 @@
 # eHealth
 
-eHealth-Project of our group.
+eHealth-Project of our java group.
