@@ -32,7 +32,7 @@ public class Email_confirm {
     private String appointment;
     private String[] receiver;
     private String confirm_subject = "Confirmation";
-    private String confirm_body = "Your doctor Appointment has been confirmed!";
+    private String confirm_body = "Your doctor Appointment has been confirmed!\nPlease remember to bring your insurance card with you to the appointment";
     
     /**
      *
@@ -41,7 +41,7 @@ public class Email_confirm {
      */
     public Email_confirm(String appointment, String[] to)
     {
-        this.appointment = "\n\nYour Appointment is: "+appointment+" o'clock";
+        this.appointment = "\n\nYour Appointment: "+appointment+" o'clock";
         this.receiver = to;
     }
 
@@ -54,17 +54,16 @@ public class Email_confirm {
         }
         
     }
-
     /**
      *
      * @param time time when the appointment is added 
      */
     
-    public void confirmation(Date time)
+    /*public void confirmation(Date time)
     {
-        new Timer().schedule(new confirm_time(), time);
+        new Timer().schedule(new confirm_time(),time);
     }
-    
+    */
     public void confirmation_mail()
     {
         

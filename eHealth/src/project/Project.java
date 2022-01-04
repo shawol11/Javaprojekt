@@ -4,17 +4,21 @@
  * and open the template in the editor.
  */
 package project;
+
 /**
  *
  * @author shawol
  */
 public class Project {
-
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+
+       Add_appointment appointment = new Add_appointment();
+       appointment.setVisible(true);
+        
     }
+         
     
 }

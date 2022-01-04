@@ -5,18 +5,92 @@
  */
 package project;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author shawol
  */
 public class PopUp_pdf extends javax.swing.JFrame {
-
+    
+    public PopUp_pdf() {
+    initComponents();
+    }
+    //Method that retrieve data from Database
+    public String database(String query,String column) throws ClassNotFoundException
+    {
+            String data = null;
+            Connection conn = null;
+            PreparedStatement stmt = null;
+            String url = "jdbc:mysql://127.0.0.1:3306/Appointment";
+            String uname = "root";
+            String pwd = "hHw01cherry";
+            Class.forName("com.mysql.cj.jdbc.Driver");
+       try { 
+            conn = (Connection) DriverManager.getConnection(url,uname,pwd);
+            stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            data = rs.getString(column);
+            
+        } catch (SQLException ex) {
+        }
+        return data;
+    }
+    
+    
+    public void pdf() throws ClassNotFoundException
+    {
+           try {
+            //Get date and time of doctor appointment and health problem from database
+            String date = database("select Date from app ORDER BY Date DESC LIMIT 1","date");
+            String time = database("select Time from app ORDER BY Time DESC LIMIT 1","time");
+            String h_problem = database("select h_problem from register ORDER BY h_problem DESC LIMIT 1","h_problem");
+            
+            //Document
+            //1. Create a Document
+            Document document = new Document(PageSize.A4, 50, 50, 50, 50);
+            
+            // 2. Create PdfWriter
+            String filename = "doctor_appointment.pdf";
+            PdfWriter.getInstance(document,new FileOutputStream(filename));
+            
+            // 3. Open document
+            document.open();
+            
+            // 4. Add content
+            document.add(new Paragraph("Doctor Appointment"));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph("Appointment: "+date+" "+time+" o'clock"));  // Date and Time
+            document.add(new Paragraph("Health Problems: " +h_problem));
+            document.add(new Paragraph(" "));
+            
+            System.out.println("Sucessfully created a PDF Datei");
+            //document.save(new FileOutputStream(filename));
+            // 5. Close document
+            document.close();
+            
+        } catch (DocumentException | FileNotFoundException ex) {
+            Logger.getLogger(PopUp_pdf.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * Creates new form PopUp_pdf
      */
-    public PopUp_pdf() {
-        initComponents();
-    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -35,9 +109,14 @@ public class PopUp_pdf extends javax.swing.JFrame {
 
         jLabel1.setText("You have sucessfully added an Doctor Appointment");
 
-        jLabel2.setText("Confirmation will be sent to your Email-Address!");
+        jLabel2.setText("You will receive a confirmation email shortly. ");
 
         jButton1.setText("Save as PDF");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -47,9 +126,11 @@ public class PopUp_pdf extends javax.swing.JFrame {
                 .addContainerGap(74, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(jLabel2)))
                         .addGap(67, 67, 67))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton1)
@@ -69,6 +150,15 @@ public class PopUp_pdf extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            pdf();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PopUp_pdf.class.getName()).log(Level.SEVERE, null, ex);
+        }
+   
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -96,12 +186,10 @@ public class PopUp_pdf extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(PopUp_pdf.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PopUp_pdf().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new PopUp_pdf().setVisible(true);
         });
     }
 
@@ -110,4 +198,5 @@ public class PopUp_pdf extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
+
 }

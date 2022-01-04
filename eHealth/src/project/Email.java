@@ -44,8 +44,9 @@ public class Email {
      */
     public Email(String appointment, String[] to)
     {
-        this.appointment = "\n\n"+appointment+" Uhr";
+        this.appointment = "\n\n"+appointment+" o'clock";
         this.receiver = to;
+        
     }
 
     
@@ -70,6 +71,7 @@ public class Email {
      * @param remindertype 1 for 1week, 2 for 3days, 3 for 1hour and 4 for 10mins
      * @param remindertime  time when reminder-mail needs to be sent
      */
+    
     public void reminder_funktion(int remindertype, Date remindertime) {
         switch(remindertype)
         {
