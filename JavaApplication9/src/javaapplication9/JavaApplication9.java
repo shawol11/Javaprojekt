@@ -7,7 +7,7 @@ package javaapplication9;
 
 /**
  *
- * @author Htet
+ * @author Htet Htet
  */
 public class JavaApplication9 {
 
