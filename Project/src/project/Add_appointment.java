@@ -287,7 +287,7 @@ public class Add_appointment extends javax.swing.JFrame {
             
             //Reminder mail
             mail_.reminder_funktion(remindertype,remindert);
-            
+            //
             //Confirmation mail not needed anymore
             //Email_confirm confirm2 = new Email_confirm(date_,receiverList);
             //Email_confirm confirm2 = new Email_confirm(date3,receiverList);
